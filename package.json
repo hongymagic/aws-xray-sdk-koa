@@ -1,0 +1,11 @@
+{
+  "name": "aws-xray-sdk-koa",
+  "version": "1.0.0",
+  "description": "AWS X-Ray Middleware for Koa (Javascript)",
+  "main": "index.js",
+  "author": "David G. Hong",
+  "license": "MIT",
+  "peerDependencies": {
+    "aws-xray-sdk-core": "^1.1.2"
+  }
+}
