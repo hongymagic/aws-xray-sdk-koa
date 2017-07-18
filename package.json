@@ -21,5 +21,8 @@
       "prettier --use-tabs --single-quote --trailing-comma es5 --write",
       "git add"
     ]
+  },
+  "dependencies": {
+    "aws-xray-sdk-core": "^1.1.2"
   }
 }
