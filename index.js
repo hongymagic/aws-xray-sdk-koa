@@ -4,9 +4,11 @@ const mwUtils = AWSXRay.middleware;
 const IncomingRequestData = mwUtils.IncomingRequestData;
 const Segment = AWSXRay.Segment;
 
-export default (defaultName) => {
+export default defaultName => {
 	if (!defaultName || typeof defaultName !== 'string') {
-		throw new Error('Default segment name was not supplied. Please provide a string.');
+		throw new Error(
+			'Default segment name was not supplied. Please provide a string.'
+		);
 	}
 
 	mwUtils.setDefaultName(defaultName);
@@ -26,15 +28,29 @@ export default (defaultName) => {
 		// Start the AWS XRay trace.
 		const amznTraceHeader = mwUtils.processHeaders(req);
 		const name = mwUtils.resolveName(req.headers.host);
-		const segment = new Segment(name, amznTraceHeader.Root, amznTraceHeader.Parent);
+		const segment = new Segment(
+			name,
+			amznTraceHeader.Root,
+			amznTraceHeader.Parent
+		);
 
 		// TODO: Using res (see above).
 		mwUtils.resolveSampling(amznTraceHeader, segment, res);
 		segment.addIncomingRequestData(new IncomingRequestData(req));
 
-		AWSXRay
-			.getLogger()
-			.debug('Starting express segment: { url: ' + req.url + ', name: ' + segment.name + ', trace_id: ' + segment.trace_id + ', id: ' + segment.id + ', sampled: ' + !segment.notTraced + ' }');
+		AWSXRay.getLogger().debug(
+			'Starting express segment: { url: ' +
+				req.url +
+				', name: ' +
+				segment.name +
+				', trace_id: ' +
+				segment.trace_id +
+				', id: ' +
+				segment.id +
+				', sampled: ' +
+				!segment.notTraced +
+				' }'
+		);
 
 		// Run all other registered middleware.
 		req.segment = segment;
@@ -50,15 +66,41 @@ export default (defaultName) => {
 			}
 
 			if (AWSXRay.utils.getCauseTypeFromHttpStatus(response.status)) {
-				segment[AWSXRay.utils.getCauseTypeFromHttpStatus(response.status)] = true;
+				segment[
+					AWSXRay.utils.getCauseTypeFromHttpStatus(response.status)
+				] = true;
 			}
 
 			segment.close();
-			AWSXRay.getLogger().debug('Closed express segment successfully: { url: ' + req.url + ', name: ' + segment.name + ', trace_id: ' + segment.trace_id + ', id: ' + segment.id + ', sampled: ' + !segment.notTraced + ' }');
+			AWSXRay.getLogger().debug(
+				'Closed express segment successfully: { url: ' +
+					req.url +
+					', name: ' +
+					segment.name +
+					', trace_id: ' +
+					segment.trace_id +
+					', id: ' +
+					segment.id +
+					', sampled: ' +
+					!segment.notTraced +
+					' }'
+			);
 		} catch (err) {
 			// Close off the AWS XRay tracing.
 			segment.close(err);
-			AWSXRay.getLogger().debug('Closed express segment with error: { url: ' + req.url + ', name: ' + segment.name + ', trace_id: ' + segment.trace_id + ', id: ' + segment.id + ', sampled: ' + !segment.notTraced + ' }');
+			AWSXRay.getLogger().debug(
+				'Closed express segment with error: { url: ' +
+					req.url +
+					', name: ' +
+					segment.name +
+					', trace_id: ' +
+					segment.trace_id +
+					', id: ' +
+					segment.id +
+					', sampled: ' +
+					!segment.notTraced +
+					' }'
+			);
 			throw err;
 		}
 	};

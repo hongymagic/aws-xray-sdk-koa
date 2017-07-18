@@ -7,5 +7,19 @@
   "license": "MIT",
   "peerDependencies": {
     "aws-xray-sdk-core": "^1.1.2"
+  },
+  "devDependencies": {
+    "husky": "^0.14.3",
+    "lint-staged": "^4.0.2",
+    "prettier": "^1.5.3"
+  },
+  "scripts": {
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier --use-tabs --single-quote --trailing-comma es5 --write",
+      "git add"
+    ]
   }
 }
