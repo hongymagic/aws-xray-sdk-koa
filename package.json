@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "AWS X-Ray Middleware for Koa (Javascript)",
   "main": "index.js",
+  "engines": {
+    "node": ">= 7.10"
+  },
   "author": "David G. Hong",
   "license": "MIT",
   "peerDependencies": {

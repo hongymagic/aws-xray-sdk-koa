@@ -1,10 +1,10 @@
-import AWSXRay from 'aws-xray-sdk-core';
+const AWSXRay = require('aws-xray-sdk-core');
 
 const mwUtils = AWSXRay.middleware;
 const IncomingRequestData = mwUtils.IncomingRequestData;
 const Segment = AWSXRay.Segment;
 
-export default defaultName => {
+module.exports = function(defaultName) {
 	if (!defaultName || typeof defaultName !== 'string') {
 		throw new Error(
 			'Default segment name was not supplied. Please provide a string.'
